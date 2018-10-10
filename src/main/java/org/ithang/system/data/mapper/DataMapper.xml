@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ithang.system.data.mapper.DataMapper">
+
+    <!-- 得到系统概要信息 -->
+    <select id="info" resultType="SysInfo">
+        select id,author,version,mobile,create_time from sys_info limit 0,1
+    </select>
+    
+    <!-- 系统表结构数据 -->
+    <select id="tables" resultType="SysTable">
+        select id,table_name,content,version from sys_table
+    </select>
+
+</mapper>

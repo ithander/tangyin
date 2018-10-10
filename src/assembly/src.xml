@@ -1,0 +1,45 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+  <id>dist</id>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <formats>
+    <format>tar.gz</format>
+    <format>dir</format>
+  </formats>
+  <fileSets>
+  
+    <fileSet>
+        <directory>target</directory>
+        <outputDirectory>${project.name}/lib</outputDirectory>
+        <includes>
+            <include>${artifactId}.jar</include>
+        </includes>
+        <excludes>
+            <exclude>readme</exclude>
+        </excludes>
+    </fileSet>
+    
+    <fileSet>
+        <directory>src/assembly/bin</directory>
+        <fileMode>0755</fileMode>
+        <lineEnding>unix</lineEnding>
+        <outputDirectory>${project.name}/bin</outputDirectory>
+    </fileSet>
+    
+    <fileSet>
+        <directory>src/assembly/logs</directory>
+        <outputDirectory>${project.name}/logs</outputDirectory>
+    </fileSet>
+    
+    <fileSet>
+         <directory>src/main/resources/${env}</directory>
+         <outputDirectory>${project.name}/conf</outputDirectory>
+         <includes>
+            <include>application.properties</include>
+            <include>logback.xml</include>
+         </includes>
+     </fileSet>
+    
+  </fileSets>
+</assembly>

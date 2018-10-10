@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.ithang.system.log.mapper.SysLogMapper">
+
+    <!-- 得到系统概要信息 -->
+    <select id="get" resultType="SysLog">
+        select id,author,version,mobile,create_time from sys_info limit 0,1
+    </select>
+    
+    <!-- 系统表结构数据 -->
+    <select id="list" parameterType="Page" resultType="SysLog">
+        select id,log_type,content,operator,create_time from sys_log
+        <where>
+            <trim suffixOverrides="and">
+	            <if test="null!=params.id">
+	                id=#{params.id}
+	            </if>
+	             <if test="null!=params.log_type">
+	                and log_type=#{params.log_type}
+	            </if>
+	             <if test="null!=params.content">
+	                content like '${params.content}'
+	            </if>
+	             <if test="null!=params.operator">
+	                operator=#{params.operator}
+	            </if>
+	             <if test="null!=params.create_time">
+	                create_time=#{params.create_time}
+	            </if>
+            </trim>
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="SysLog">
+        insert into sys_log(log_type,content,operator,create_time)value(#{log_type},#{content},#{operator},#{create_time})
+    </insert>
+
+</mapper>
