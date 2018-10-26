@@ -1,4 +1,4 @@
-package org.ithang.system;
+package org.ithang.application;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,15 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller("systemIndex")
 @Alias("systemIndex")
-@RequestMapping("sys")
-public class SystemIndexAction {
+@RequestMapping
+public class LoginAction {
 
-	@RequestMapping
-	public String index(HttpServletRequest request){
-		request.setAttribute("login", 0);
-		return "system/login";
-	}
-	
 	@RequestMapping(value="login",method=RequestMethod.GET)
 	public String getLogin(HttpServletRequest request){
 		request.setAttribute("login", 0);
@@ -35,7 +29,7 @@ public class SystemIndexAction {
 		user.setUpass(upass);
 		SessionsManager.updateSession(user, request);
 		
-		return "redirect:/sys/home";
+		return "redirect:/home";
 		//return "forward:/sys/home";
 		
 	}
@@ -48,12 +42,5 @@ public class SystemIndexAction {
 		return "system/login";
 	}
 	
-	@RequestMapping("home")
-	public String home(HttpServletRequest request){
-		if(SessionsManager.isLogin(request)){
-			return "system/system";
-		}
-		return "system/login";
-	}
 	
 }

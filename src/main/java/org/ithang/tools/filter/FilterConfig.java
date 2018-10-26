@@ -10,8 +10,8 @@ public class FilterConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new SessionFilter()).addPathPatterns("/**");
-		registry.addInterceptor(new LogInterceptor()).addPathPatterns("/**");
+		//registry.addInterceptor(new SessionFilter()).addPathPatterns("/**");
+		//registry.addInterceptor(new LogInterceptor()).addPathPatterns("/**");
 		//registry.addWebRequestInterceptor(interceptor)
 	}
 }

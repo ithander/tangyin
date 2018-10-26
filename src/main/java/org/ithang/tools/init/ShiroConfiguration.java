@@ -22,25 +22,33 @@ public class ShiroConfiguration {
 	        ShiroFilterFactoryBean bean=new ShiroFilterFactoryBean();
 	        bean.setSecurityManager(manager);
 	        //配置登录的url和登录成功的url
-	        bean.setLoginUrl("/auth/login");
+	        // setLoginUrl 如果不设置值，默认会自动寻找Web工程根目录下的"/login.jsp"页面 或 "/login" 映射
+	        bean.setLoginUrl("/login");
 	        bean.setSuccessUrl("/home");
+	        
+	        
+	        // 设置无权限时跳转的 url;
+	        bean.setUnauthorizedUrl("/notRole");
+	        
 	        //配置访问权限
 	        LinkedHashMap<String, String> filterChainDefinitionMap=new LinkedHashMap<>();
-	        filterChainDefinitionMap.put("/jsp/login.jsp*", "anon"); //表示可以匿名访问
 	        filterChainDefinitionMap.put("/index", "anon");
-	        filterChainDefinitionMap.put("/", "anon");
+	        filterChainDefinitionMap.put("/login", "anon"); //表示可以匿名访问
+	        filterChainDefinitionMap.put("/sys/**", "roles[user]");
+	        //管理员，需要角色权限 “admin”
+	        filterChainDefinitionMap.put("/admin/**", "roles[admin]");
 	        filterChainDefinitionMap.put("/logout*","anon");
 	        filterChainDefinitionMap.put("/static/**","anon");
-	        filterChainDefinitionMap.put("/auth/*","authc");//表示需要认证才可以访问
-	        filterChainDefinitionMap.put("/auth/**","authc");//表示需要认证才可以访问
-	        filterChainDefinitionMap.put("/auth/*.*","authc");
+	        filterChainDefinitionMap.put("/public/**","anon");
+	        //其余接口一律拦截
+	        //主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
+	        //filterChainDefinitionMap.put("/**", "authc");
 	        bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 	        return bean;
 	    }
 	    //配置核心安全事务管理器
 	    @Bean(name="securityManager")
 	    public SecurityManager securityManager(@Qualifier("authRealm") AuthRealm authRealm) {
-	        System.err.println("--------------shiro已经加载----------------");
 	        DefaultWebSecurityManager manager=new DefaultWebSecurityManager();
 	        manager.setRealm(authRealm);
 	        return manager;
