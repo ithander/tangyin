@@ -11,10 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.dbutils.handlers.BeanHandler;
 import org.ithang.tools.model.ActionValues;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 public class BaseDao extends Dao {
 
@@ -24,8 +23,8 @@ public class BaseDao extends Dao {
 	 * @param params 对象数组
 	 * @return
 	 */
-    public Integer getsInt(JdbcTemplate jdbcTemplate,String sql,Object ...params){
-		return jdbcTemplate.queryForObject(sql, params, Integer.class);
+    public Integer getsInt(String sql,Object ...params){
+		return getJdbcTemplate().queryForObject(sql, params, Integer.class);
 	}
     
     /**
@@ -34,8 +33,8 @@ public class BaseDao extends Dao {
 	 * @param params map类型
 	 * @return
 	 */
-	public Integer getInt(NamedParameterJdbcTemplate namedJdbcTemplate,String sql,Map<String,Object> params){
-		return namedJdbcTemplate.queryForObject(sql, params, Integer.class);
+	public Integer getInt(String sql,Map<String,Object> params){
+		return getNamedJdbcTemplate().queryForObject(sql, params, Integer.class);
 	}
     
     /**
@@ -44,8 +43,8 @@ public class BaseDao extends Dao {
 	 * @param params 对象数组
 	 * @return
 	 */
-    public List<Integer> listsInt(JdbcTemplate jdbcTemplate,String sql,Object ...params){
-    	return jdbcTemplate.queryForList(sql, Integer.class,params);
+    public List<Integer> listsInt(String sql,Object ...params){
+    	return getJdbcTemplate().queryForList(sql, Integer.class,params);
 	}
     
     /**
@@ -54,8 +53,8 @@ public class BaseDao extends Dao {
 	 * @param params 对象数组
 	 * @return
 	 */
-    public List<Integer> listInt(NamedParameterJdbcTemplate namedJdbcTemplate,String sql,Map<String,Object> params){
-    	return namedJdbcTemplate.queryForList(sql, params, Integer.class);
+    public List<Integer> listInt(String sql,Map<String,Object> params){
+    	return getNamedJdbcTemplate().queryForList(sql, params, Integer.class);
 	}
     
     /**
@@ -64,8 +63,8 @@ public class BaseDao extends Dao {
 	 * @param params 对象数组
 	 * @return
 	 */
-    public String getsStr(JdbcTemplate jdbcTemplate,String sql,Object ...params){
-		return jdbcTemplate.queryForObject(sql, params, String.class);
+    public String getsStr(String sql,Object ...params){
+		return getJdbcTemplate().queryForObject(sql, params, String.class);
 	}
 	
     /**
@@ -74,8 +73,8 @@ public class BaseDao extends Dao {
 	 * @param params map类型
 	 * @return
 	 */
-	public String getStr(NamedParameterJdbcTemplate namedJdbcTemplate,String sql,Map<String,Object> params){
-		return namedJdbcTemplate.queryForObject(sql, params, String.class);
+	public String getStr(String sql,Map<String,Object> params){
+		return getNamedJdbcTemplate().queryForObject(sql, params, String.class);
 	}
 	
    /**
@@ -84,8 +83,8 @@ public class BaseDao extends Dao {
 	* @param params 对象数组
 	* @return
     */
-	public List<String> listsStr(JdbcTemplate jdbcTemplate,String sql,Object ...params){
-	    return jdbcTemplate.queryForList(sql, String.class,params);
+	public List<String> listsStr(String sql,Object ...params){
+	    return getJdbcTemplate().queryForList(sql, String.class,params);
 	}
 		
 	/**
@@ -94,9 +93,10 @@ public class BaseDao extends Dao {
 	 * @param params map类型
 	 * @return
 	 */
-	public List<String> listStr(NamedParameterJdbcTemplate namedJdbcTemplate,String sql,Map<String,Object> params){
-		return namedJdbcTemplate.queryForList(sql, params, String.class);
+	public List<String> listStr(String sql,Map<String,Object> params){
+		return getNamedJdbcTemplate().queryForList(sql, params, String.class);
 	}
+	
 	
 	/**
      * 查询一条任意类型列
@@ -105,8 +105,16 @@ public class BaseDao extends Dao {
      * @param cls
      * @return
      */
-    public <T>T getObj(NamedParameterJdbcTemplate namedJdbcTemplate,String sql,Map<String,Object> params,Class<T> cls){
-		return namedJdbcTemplate.queryForObject(sql, params, cls);
+    public <T>T getObj(String sql,Map<String,Object> params,RowMapper<T> rowMapper){
+    	try{
+		    List<T> rs=getNamedJdbcTemplate().query(sql, params, rowMapper);
+		    if(null!=rs&&!rs.isEmpty()){
+		    	return rs.get(0);
+		    }
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return null;
 	}
     
     /**
@@ -116,8 +124,38 @@ public class BaseDao extends Dao {
      * @param cls
      * @return
      */
-    public <T>List<T> listObj(NamedParameterJdbcTemplate namedJdbcTemplate,String sql,Map<String,Object> params,Class<T> cls){
-		return namedJdbcTemplate.queryForList(sql, params, cls);
+    public <T>T getObj(String sql,RowMapper<T> rowMapper,Object ...params){
+    	try{
+		    List<T> rs=getJdbcTemplate().query(sql, rowMapper,params);
+		    if(null!=rs&&!rs.isEmpty()){
+		    	return rs.get(0);
+		    }
+    	}catch(Exception e){
+    		e.printStackTrace();
+    	}
+    	return null;
+	}
+    
+    /**
+     * 查询一条任意类型列
+     * @param sql
+     * @param params map类型
+     * @param cls
+     * @return
+     */
+    public <T>List<T> listObj(String sql,Map<String,Object> params,RowMapper<T> rowMapper){
+		return getNamedJdbcTemplate().query(sql, params, rowMapper);
+	}
+    
+    /**
+     * 查询一条任意类型列
+     * @param sql
+     * @param params map类型
+     * @param cls
+     * @return
+     */
+    public <T>List<T> listObj(String sql,RowMapper<T> rowMapper,Object ...params){
+		return getJdbcTemplate().query(sql, rowMapper,params);
 	}
     
     /**
@@ -126,8 +164,8 @@ public class BaseDao extends Dao {
 	 * @param params map类型
 	 * @return
 	 */
-	public int updateSQL(NamedParameterJdbcTemplate namedJdbcTemplate,String sql,Map<String,Object> params){
-		return namedJdbcTemplate.update(sql, params);	
+	public int updateSQL(String sql,Map<String,Object> params){
+		return getNamedJdbcTemplate().update(sql, params);	
 	}
 	
 	/**
@@ -136,8 +174,8 @@ public class BaseDao extends Dao {
 	 * @param params 对象数组
 	 * @return
 	 */
-	public int updatesSQL(JdbcTemplate jdbcTemplate,String sql,Object ... params){
-		return jdbcTemplate.update(sql, params);
+	public int updatesSQL(String sql,Object ... params){
+		return getJdbcTemplate().update(sql, params);
 	}
 	
 	/**
@@ -146,8 +184,8 @@ public class BaseDao extends Dao {
 	 * @param params map类型
 	 * @return
 	 */
-	public Map<String,Object> getSQL(NamedParameterJdbcTemplate namedJdbcTemplate,String sql,Map<String,Object> params){
-		List<Map<String,Object>> rs=listSQL(namedJdbcTemplate,sql,params);
+	public Map<String,Object> getSQL(String sql,Map<String,Object> params){
+		List<Map<String,Object>> rs=listSQL(sql,params);
 		if(null!=rs&&rs.size()>0){
 			return rs.get(0);
 		}
@@ -160,8 +198,8 @@ public class BaseDao extends Dao {
 	 * @param params 对象类型
 	 * @return
 	 */
-	public Map<String,Object> getsSQL(JdbcTemplate jdbcTemplate,String sql,Object ... params){
-		List<Map<String,Object>> rs=listsSQL(jdbcTemplate,sql,params);
+	public Map<String,Object> getsSQL(String sql,Object ... params){
+		List<Map<String,Object>> rs=listsSQL(sql,params);
 		if(null!=rs&&rs.size()>0){
 			return rs.get(0);
 		}
@@ -174,7 +212,7 @@ public class BaseDao extends Dao {
 	 * @param params
 	 * @return
 	 */
-	public List<Map<String,Object>> listSQL(NamedParameterJdbcTemplate namedJdbcTemplate,String sql,Map<String,Object> params){
+	public List<Map<String,Object>> listSQL(String sql,Map<String,Object> params){
 		ActionValues values=null;
 		if(params instanceof ActionValues){
 			values=(ActionValues)params;
@@ -185,7 +223,7 @@ public class BaseDao extends Dao {
 		if(values.isPage()){//如果需要分页
 			
 			//统计总记录数
-			long total=getInt(namedJdbcTemplate,"select count(0) from ( "+sql+" ) a",params);
+			long total=getInt("select count(0) from ( "+sql+" ) a",params);
 			values.setTotal(total);
 			
 			if(!(params==values)){//如果不是同一实例,把数据同步到params中
@@ -230,7 +268,7 @@ public class BaseDao extends Dao {
 			sql=sber.toString();
 		}
 		
-	    return namedJdbcTemplate.query(sql, params, new RowMapper<Map<String,Object>>(){
+	    return getNamedJdbcTemplate().query(sql, params, new RowMapper<Map<String,Object>>(){
 			@Override
 			public Map<String,Object> mapRow(ResultSet rst, int index) throws SQLException {
 				ResultSetMetaData meta=rst.getMetaData();
@@ -273,8 +311,8 @@ public class BaseDao extends Dao {
 	 * @param params
 	 * @return
 	 */
-	public List<Map<String,Object>> listsSQL(JdbcTemplate jdbcTemplate,String sql,Object ... params){
-		return jdbcTemplate.query(sql, params, new RowMapper<Map<String,Object>>(){
+	public List<Map<String,Object>> listsSQL(String sql,Object ... params){
+		return getJdbcTemplate().query(sql, params, new RowMapper<Map<String,Object>>(){
 			@Override
 			public Map<String,Object> mapRow(ResultSet rst, int index)throws SQLException {
 				ResultSetMetaData meta=rst.getMetaData();

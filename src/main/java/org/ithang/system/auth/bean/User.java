@@ -10,8 +10,12 @@ public class User {
 	private String id;
 	private String uname;
 	private String upass;
-	private String birthday;
+	private String title;
 	private int sex;//0女性,1男性
+	private String phone;
+	private String weixin;
+	private String address;
+	private String area;
 	private String create_time;
 	
 	public String getId() {
@@ -32,11 +36,35 @@ public class User {
 	public void setUpass(String upass) {
 		this.upass = upass;
 	}
-	public String getBirthday() {
-		return birthday;
+	public String getTitle() {
+		return title;
 	}
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getWeixin() {
+		return weixin;
+	}
+	public void setWeixin(String weixin) {
+		this.weixin = weixin;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getArea() {
+		return area;
+	}
+	public void setArea(String area) {
+		this.area = area;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	public int getSex() {
 		return sex;

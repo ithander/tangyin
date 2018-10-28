@@ -4,6 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.ibatis.type.Alias;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.ithang.system.auth.bean.User;
 import org.ithang.tools.filter.session.SessionsManager;
 import org.springframework.stereotype.Controller;
@@ -19,15 +22,17 @@ public class LoginAction {
 	@RequestMapping(value="login",method=RequestMethod.GET)
 	public String getLogin(HttpServletRequest request){
 		request.setAttribute("login", 0);
-		return "system/login";
+		return "application/login";
 	}
 	
 	@RequestMapping(value="login",method=RequestMethod.POST)
 	public String postLogin(@RequestParam("uname")String uname,@RequestParam("upass")String upass,HttpServletRequest request,HttpServletResponse response){
-		User user=new User();
-		user.setUname(uname);
-		user.setUpass(upass);
-		SessionsManager.updateSession(user, request);
+		// 从SecurityUtils里边创建一个 subject 
+		Subject subject = SecurityUtils.getSubject(); 
+		// 在认证提交前准备 token（令牌）
+		UsernamePasswordToken token = new UsernamePasswordToken(uname, upass); 
+		// 执行认证登陆 
+		subject.login(token);
 		
 		return "redirect:/home";
 		//return "forward:/sys/home";
@@ -36,9 +41,9 @@ public class LoginAction {
 	
 	@RequestMapping(value="loginout",method=RequestMethod.GET)
 	public String loginout(HttpServletRequest request){
-		if(SessionsManager.isLogin(request)){
-			SessionsManager.clearSession(request);
-		}
+		Subject subject = SecurityUtils.getSubject();
+        //注销
+        subject.logout();
 		return "system/login";
 	}
 	
