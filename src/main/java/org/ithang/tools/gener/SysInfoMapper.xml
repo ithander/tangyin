@@ -3,7 +3,7 @@
 <mapper namespace="org.ithang.tools.gener.SysInfoMapper">
 
     <select id="get" resultType="SysInfo">
-        select id,author,version,mobile,createTime from sysInfo limit 0,1
+        select id,author,version,mobile,createTime from sysInfo where id=#{id}
     </select>
 
 </mapper>

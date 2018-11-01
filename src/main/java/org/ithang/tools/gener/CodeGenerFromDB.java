@@ -69,6 +69,7 @@ public class CodeGenerFromDB {
 							}else{
 								values.put("pri", "String");	//全局设置主键类型
 							}
+							values.put("idFieldWhere", mp.get("field")+"=#{"+mp.get("field")+"}");
 						}
 						
 					}

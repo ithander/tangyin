@@ -3,7 +3,12 @@
 <mapper namespace="${PkgName}.${BeanName}Mapper">
 
     <select id="get" resultType="${BeanName}">
-        select <#list BeanFields as field><#if field_index != 0 >,</#if>${(field.field)!""}</#list> from ${TableName} limit 0,1
+        select <#list BeanFields as field><#if field_index != 0 >,</#if>${(field.field)!""}</#list> from ${TableName} where ${idFieldWhere}
+    </select>
+    
+    <select id="list" resultType="${BeanName}">
+        select <#list BeanFields as field><#if field_index != 0 >,</#if>${(field.field)!""}</#list> from ${TableName} 
+        where ${idFieldWhere}
     </select>
 
 </mapper>
