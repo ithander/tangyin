@@ -1,8 +1,12 @@
 package org.ithang.tools.database;
 
 import java.lang.reflect.ParameterizedType;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.dbutils.handlers.BeanHandler;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.log4j.Logger;
 import org.ithang.tools.model.ModelSQL;
 
@@ -21,11 +25,11 @@ public class ModelDao<T> extends BaseDao {
 	}
 	
 	public int insert(Map<String,Object> values){
-		return updatesSQL(null,modelSQL.insertSQL(values));
+		return updatesSQL(modelSQL.insertSQL(values));
 	}
 	
 	public int update(Map<String,Object> values){
-		return updatesSQL(null,modelSQL.updateSQL(values));
+		return updatesSQL(modelSQL.updateSQL(values));
 	}
 	
 	/**
@@ -34,11 +38,38 @@ public class ModelDao<T> extends BaseDao {
 	 * @return
 	 */
 	public int delete(String... ids){
-		return updatesSQL(null,modelSQL.deleteSQL(ids));
+		return updatesSQL(modelSQL.deleteSQL(ids));
 	}
 	
 	public int delete(Map<String,Object> values){
-		return updatesSQL(null,modelSQL.deleteSQL(values));
+		return updatesSQL(modelSQL.deleteSQL(values));
+	}
+	
+	public T getBean(String sql){
+		try {
+			return getQuery().query(sql, new BeanHandler<>(modelCls));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public T getBean(String sql,Object ...params){
+		try {
+			return getQuery().query(sql, new BeanHandler<>(modelCls),params);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public List<T> listBean(String sql,Object ...params){
+		try {
+			return getQuery().query(sql, new BeanListHandler<>(modelCls),params);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/*

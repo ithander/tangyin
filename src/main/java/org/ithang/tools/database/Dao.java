@@ -1,17 +1,15 @@
 package org.ithang.tools.database;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
-import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp2.BasicDataSourceFactory;
-import org.ithang.tools.model.DBConfig;
+import org.apache.commons.dbutils.QueryRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Component;
 
 /**
  * 该设计是为了适应多数据源的情况
@@ -23,94 +21,54 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author ithang
  *
  */
-public abstract class Dao {
+@Component
+public class Dao {
 
 	@Autowired
-	private static DataSource dataSource;//根(root)数据源,根(root)数据源拥有项目配置数据
+	private DataSource dataSource;//根(root)数据源,根(root)数据源拥有项目配置数据
 	
-	private static DBOperator dbOperator;//根(root)数据源操作者
+	private  JdbcTemplate jdbcTemplate;
+	private  NamedParameterJdbcTemplate namedJdbcTemplate;
+	private  QueryRunner qr; 
 	
-	private final static Map<String, DBOperator> ds=new HashMap<String, DBOperator>(5);
+	private  Logger logger=LoggerFactory.getLogger(Dao.class);
 	
-	private static Logger logger=LoggerFactory.getLogger(Dao.class);
+	public Dao(){}
 	
-	public Dao(){logger.debug("初始化默认数据源成功");}
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+
+	public QueryRunner getQuery(){
+		if(null==qr){
+			qr=new QueryRunner(getDataSource());
+		}
+		return qr;
+	}
 	
-	
+	public JdbcTemplate getJdbcTemplate() {
+		if(null==jdbcTemplate){
+			jdbcTemplate=new JdbcTemplate(getDataSource());
+		}
+		return jdbcTemplate;
+	}
+
+
+	public  NamedParameterJdbcTemplate getNamedJdbcTemplate() {
+		if(null==this.namedJdbcTemplate){
+			this.namedJdbcTemplate=new NamedParameterJdbcTemplate(getJdbcTemplate());	
+		}
+		return namedJdbcTemplate;
+	}
+
+
 	/**
 	 * 得到Root数据源
 	 * @return
 	 */
-	public static DataSource getDataSource() {
-		return Dao.dataSource;
+	public DataSource getDataSource() {
+		return dataSource;
 	}
 	
-	/**
-	 * 得到Root数据源操作者
-	 * @return
-	 */
-	public static DBOperator getDBOperator() {
-		if(null!=dataSource&&(null==dbOperator||!dbOperator.equals(dataSource))){
-			dbOperator=new DBOperator("default",dataSource);
-		}
-		return dbOperator;
-	}
-	
-	/**
-	 * 根据属性文件加载数据源
-	 * @param key
-	 * @param db_config
-	 */
-	public void loadDsByProperties(String key,Properties db_config) {
-		try{
-		    DataSource keyDs=BasicDataSourceFactory.createDataSource(db_config);
-		    ds.put(key, new DBOperator(key, keyDs));
-		}catch(Exception e){
-			logger.error("加载数据源"+key+"出错"+e.getMessage());
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * 根据JNDI加载数据源
-	 * @param key
-	 * @param lookup
-	 */
-	public void loadDsByJNDI(String key,String lookup){
-		try{
-		     InitialContext ic = new InitialContext();
-		     DataSource keyDs = (DataSource) ic.lookup(lookup);
-		     ds.put(key, new DBOperator(key, keyDs));
-		}catch(Exception e){
-			logger.error("加载数据源"+key+"出错"+e.getMessage());
-			e.printStackTrace();
-		}
-
-	}
-	
-	/**
-	 * 加载数据源
-	 * @param key
-	 * @param dbConfig
-	 */
-	public void load(String key,DBConfig dbConfig){
-		
-	}
-	
-	/**
-	 * 加载数据源
-	 * @param key
-	 * @param uname
-	 * @param upass
-	 * @param url
-	 */
-	public void load(String key,String uname,String upass,String url){
-		
-	}
-
-	public static Map<String, DBOperator> getDs() {
-		return ds;
-	}
-
 	
 }
