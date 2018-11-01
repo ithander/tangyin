@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.RowMapper;
  * @author ithang
  *
  */
-public class CodeGener {
+public class CodeGenerFromBean {
 
 	/**
 	 * 根据表结构生成 对应的Bean,Mapper,Service

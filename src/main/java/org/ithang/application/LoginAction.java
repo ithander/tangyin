@@ -27,7 +27,6 @@ public class LoginAction {
 		User user=new User();
 		user.setUname(uname);
 		user.setUpass(upass);
-		SessionsManager.updateSession(user, request);
 		
 		return "redirect:/home";
 		//return "forward:/sys/home";
