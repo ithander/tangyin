@@ -1,10 +1,13 @@
 package org.ithang.system.auth.bean;
 
+import org.ithang.tools.mate.Table;
+
 /**
  * 用户表
  * @author ithang
  *
  */
+@Table("user_info")
 public class User {
 
 	private String id;

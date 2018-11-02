@@ -10,6 +10,7 @@ import org.apache.shiro.subject.Subject;
 import org.ithang.system.auth.bean.User;
 import org.ithang.tools.filter.session.SessionsManager;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,14 +27,19 @@ public class LoginAction {
 	}
 	
 	@RequestMapping(value="login",method=RequestMethod.POST)
-	public String postLogin(@RequestParam("uname")String uname,@RequestParam("upass")String upass,HttpServletRequest request,HttpServletResponse response){
-		// 从SecurityUtils里边创建一个 subject 
-		Subject subject = SecurityUtils.getSubject(); 
-		// 在认证提交前准备 token（令牌）
-		UsernamePasswordToken token = new UsernamePasswordToken(uname, upass); 
-		// 执行认证登陆 
-		subject.login(token);
-		
+	public String postLogin(@RequestParam("uname")String uname,@RequestParam("upass")String upass,HttpServletRequest request,HttpServletResponse response,Model model){
+		try{
+		    // 从SecurityUtils里边创建一个 subject 
+		    Subject subject = SecurityUtils.getSubject(); 
+  		    //在认证提交前准备 token（令牌）
+		    UsernamePasswordToken token = new UsernamePasswordToken(uname, upass); 
+            // 执行认证登陆 
+		    subject.login(token);
+		    System.out.println(token.getPrincipal());
+		    model.addAttribute("user", token.getPrincipal());
+		}catch(Exception e){
+			model.addAttribute("login", "fail");
+		}
 		return "redirect:/home";
 		//return "forward:/sys/home";
 		

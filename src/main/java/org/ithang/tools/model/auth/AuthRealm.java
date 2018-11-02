@@ -35,7 +35,7 @@ public class AuthRealm extends AuthorizingRealm{
 		if (null == user) { 
 			 throw new AccountException("用户名或密码不正确"); 
 	    }
-		return  new SimpleAuthenticationInfo(token.getPrincipal(), user.getUpass(), user.getTitle());
+		return  new SimpleAuthenticationInfo(user, user.getUpass(), user.getTitle());
 	}
 
 	
