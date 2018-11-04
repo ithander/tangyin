@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@Controller("systemIndex")
-@Alias("systemIndex")
+@Controller
 @RequestMapping
 public class LoginAction {
 
@@ -35,13 +34,12 @@ public class LoginAction {
 		    UsernamePasswordToken token = new UsernamePasswordToken(uname, upass); 
             // 执行认证登陆 
 		    subject.login(token);
-		    System.out.println(token.getPrincipal());
-		    model.addAttribute("user", token.getPrincipal());
+		    model.addAttribute("login", token.getPrincipal());
 		}catch(Exception e){
-			model.addAttribute("login", "fail");
+			model.addAttribute("login", "");
 		}
-		return "redirect:/home";
-		//return "forward:/sys/home";
+		//return "redirect:/home";
+		return "index";
 		
 	}
 	
@@ -50,7 +48,7 @@ public class LoginAction {
 		Subject subject = SecurityUtils.getSubject();
         //注销
         subject.logout();
-		return "system/login";
+		return "index";
 	}
 	
 	

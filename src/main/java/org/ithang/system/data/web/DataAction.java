@@ -1,6 +1,7 @@
 package org.ithang.system.data.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.ithang.system.data.bean.Data;
 import org.ithang.system.data.bean.SysInfo;
@@ -11,15 +12,13 @@ import org.ithang.tools.model.ActionResult;
 import org.ithang.tools.model.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
- * 系统数据维护功能
- * 包括:
- * 系统安装初始化与升级
- * 菜单管理
- * 表结构管理
+ *
+ * 管理平台，控制台页面，显示各种统计信息
  * @author zyt
  *
  */
@@ -29,6 +28,13 @@ public class DataAction extends Action<Data>{
 
 	@Autowired
 	private DataService dataService;
+	
+	@RequestMapping(method=RequestMethod.GET)
+	public String index(Model model){
+		Map<String,Object> data=null;
+		model.addAttribute("data", data);
+		return "system/data/index";
+	}
 	
 	@RequestMapping(value="info",method=RequestMethod.GET)
 	public ActionResult info(){

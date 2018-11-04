@@ -63,7 +63,7 @@ public class ModelDao<T> extends BaseDao {
 		return null;
 	}
 	
-	public List<T> listBean(String sql,Object ...params){
+	public List<T> listsBean(String sql,Object ...params){
 		try {
 			return getQuery().query(sql, new BeanListHandler<>(modelCls),params);
 		} catch (SQLException e) {
@@ -71,6 +71,7 @@ public class ModelDao<T> extends BaseDao {
 		}
 		return null;
 	}
+	
 	
 	/*
 	public T get(Map<String,Object> values){

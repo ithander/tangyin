@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<#setting number_format="#">
+<html lang="zh">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>个人中心</title>
+        <link rel="stylesheet" href="/layui/css/layui.css">
+    </head>
+    
+    <body>
+        <form class="layui-form" action="/sys/msg/send" method="post"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+		    <div class="layui-inline">
+			      <label class="layui-form-label">发送内容</label>
+			      <div class="layui-input-inline">
+			        <select name="temp_id" lay-verify="required" lay-search="">
+			          <#if temps??>
+					     <#list temps as temp>
+					         <#if temp.id==temp_id>
+					             <option value="${temp.id}" selected>${temp.title}</option>
+					          <#else>
+					              <option value="${temp.id}"  >${temp.title}</option> 
+					         </#if>
+					        
+					    </#list>
+					  </#if>
+			        </select>
+			      </div>
+			    </div>
+			  </div>
+		    
+		    <div class="layui-inline">
+		      <label class="layui-form-label">数量</label>
+		      <div class="layui-input-inline">
+		        <input type="tel" name="num" autocomplete="off" placeholder="发送短信数量[可选填]" class="layui-input">
+		      </div>
+		    </div>
+		     <div class="layui-inline">
+			    <div class="layui-input-block">
+			      <button class="layui-btn" lay-submit="" >发送</button>
+			    </div>
+			  </div>
+		     <div class="layui-form-item layui-form-text">
+			    <label class="layui-form-label">手机号</label>
+			    <div class="layui-input-block">
+			      <textarea name="phones" placeholder="发送到指定的手机号,多个用回车换行分隔[可选填]" rows="50" class="layui-textarea"></textarea>
+			    </div>
+			  </div>
+		</form>
+	</body>
+	<script type="text/javascript" src="/layui/layui.all.js"></script>
+	<script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
+</html>

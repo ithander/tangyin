@@ -10,7 +10,7 @@ import org.ithang.tools.mate.Table;
 @Table("user_info")
 public class User {
 
-	private String id;
+	private int id;
 	private String uname;
 	private String upass;
 	private String title;
@@ -19,12 +19,14 @@ public class User {
 	private String weixin;
 	private String address;
 	private String area;
+	private int admin;
 	private String create_time;
 	
-	public String getId() {
+	
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getUname() {
@@ -74,6 +76,12 @@ public class User {
 	}
 	public void setSex(int sex) {
 		this.sex = sex;
+	}
+	public int getAdmin() {
+		return admin;
+	}
+	public void setAdmin(int admin) {
+		this.admin = admin;
 	}
 	public String getCreate_time() {
 		return create_time;

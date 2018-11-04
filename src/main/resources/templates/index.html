@@ -6,6 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        
     </head>
     <body>
         <div class="container-fluid">
@@ -21,62 +22,49 @@
 											<a href="#">主页</a>
 										</li>
 										<li>
-											<a href="#">链接</a>
+											<a href="#">汤阴商店</a>
 										</li>
 										<li>
-											<a href="#">链接</a>
+											<a href="#">社区论坛</a>
 										</li>
 										<li class="dropdown">
-											<a class="dropdown-toggle" data-toggle="dropdown" href="#">下拉菜单</a>
+											<a class="dropdown-toggle" data-toggle="dropdown" href="#">正能量</a>
 											<ul class="dropdown-menu">
 												<li>
-													<a href="#">下拉导航1</a>
+													<a href="#">寻人启示</a>
 												</li>
 												<li>
-													<a href="#">下拉导航2</a>
-												</li>
-												<li>
-													<a href="#">其他</a>
-												</li>
-												<li class="divider">
-												</li>
-												<li class="nav-header">
-													标签
-												</li>
-												<li>
-													<a href="#">链接1</a>
-												</li>
-												<li>
-													<a href="#">链接2</a>
+													<a href="#">修身养性</a>
 												</li>
 											</ul>
 										</li>
 									</ul>
 									<ul class="nav pull-right">
 										<li>
-											<a href="/login">登录</a>
+										    <#if login?? && login!="">
+										        <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">${login}</a>
+										        <ul class="dropdown-menu">
+													<li>
+														<a href="/self">个人中心</a>
+													</li>
+													<li class="divider">
+													</li>
+													<li>
+														<a href="/loginout">退出</a>
+													</li>
+											    </ul>
+										    <#else>
+										        <a href="/login">登录</a>
+										    </#if>
+											
 										</li>
 										<li class="divider-vertical">
 										</li>
+										<#if !(login?? && login!="")>
 										<li class="dropdown">
-											<a class="dropdown-toggle" data-toggle="dropdown" href="#">注册</a>
-											<ul class="dropdown-menu">
-												<li>
-													<a href="#">下拉导航1</a>
-												</li>
-												<li>
-													<a href="#">下拉导航2</a>
-												</li>
-												<li>
-													<a href="#">其他</a>
-												</li>
-												<li class="divider">
-												</li>
-												<li>
-													<a href="#">链接3</a>
-												</li>
-											</ul>
+											<a class="dropdown-toggle" data-toggle="dropdown" href="/register">注册</a>
 										</li>
+										</#if>
 									</ul>
 								</div>
 								
@@ -292,6 +280,6 @@
 			</div>
 		</div>
     </body>
-    <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/bootstrap/js/jquery.js"></script>
     <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
 </html>
